@@ -3,6 +3,7 @@ package com.bignerdranch.android.geoquiz
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +21,21 @@ class MainActivity : AppCompatActivity() {
         trueButton.setOnClickListener {
             view: View ->
             // 버튼 클릭의 응답을 여기서 처리한다.
+            Toast.makeText(
+                this,
+                R.string.correct_toast,
+                Toast.LENGTH_SHORT)
+                .show()
+        }
+
+        falseButton.setOnClickListener {
+            view: View ->
+            // 버튼 클릭의 응답을 여기서 처리한다.
+            Toast.makeText(
+                this,
+                R.string.incorrect_toast,
+                Toast.LENGTH_SHORT)
+                .show()
         }
 
     }
