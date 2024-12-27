@@ -67,7 +67,7 @@ class CheatActivity : AppCompatActivity() {
     private fun setAnswerShownResult(isAnswerShown: Boolean){
         val data = Intent().apply {
             putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown)
-        }
+        } // 부모액티비티로 보내기 위해 인텐트와 엑스트라 생성
         setResult(Activity.RESULT_OK, data)
     }
 

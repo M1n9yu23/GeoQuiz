@@ -78,7 +78,8 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == REQUEST_CODE_CHEAT) {
             quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
         }
-    }
+    } // setResult함수가 호출됐을 때 안드로이드 매니저가 자동 호출시킴
+    // 그래서 이때 실행 해야할 것들을 구현
 
     override fun onStart() {
         super.onStart()
