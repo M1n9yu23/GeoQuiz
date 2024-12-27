@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
     private lateinit var questionTextView: TextView
+    private lateinit var cheatButton: Button
 
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProvider(this).get(QuizViewModel::class.java)
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
+        cheatButton = findViewById(R.id.cheat_button)
         questionTextView = findViewById(R.id.question_text_view)
 
         trueButton.setOnClickListener { view: View ->
@@ -44,6 +47,12 @@ class MainActivity : AppCompatActivity() {
         falseButton.setOnClickListener { view: View ->
             // 버튼 클릭의 응답을 여기서 처리한다.
             checkAnswer(false)
+        }
+
+        cheatButton.setOnClickListener {
+            // CheatActivity를 시작시킨다.
+            val intent = Intent(this, CheatActivity::class.java)
+            startActivity(intent)
         }
 
         nextButton.setOnClickListener {
