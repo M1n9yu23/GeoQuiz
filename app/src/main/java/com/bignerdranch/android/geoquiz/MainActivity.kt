@@ -17,6 +17,7 @@ private const val KEY_INDEX = "index"
 private const val REQUEST_CODE_CHEAT = 0
 private const val KEY_CHEATER = "cheater"
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: Button
     private lateinit var questionTextView: TextView
     private lateinit var cheatButton: Button
+    private lateinit var remainingCheats: TextView
 
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProvider(this).get(QuizViewModel::class.java)
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         nextButton = findViewById(R.id.next_button)
         cheatButton = findViewById(R.id.cheat_button)
         questionTextView = findViewById(R.id.question_text_view)
+        remainingCheats = findViewById(R.id.remaining_cheats)
 
         trueButton.setOnClickListener { view: View ->
             // 버튼 클릭의 응답을 여기서 처리한다.
@@ -61,13 +64,14 @@ class MainActivity : AppCompatActivity() {
 
             val options = ActivityOptions.makeClipRevealAnimation(it, 0, 0, it.width, it.height)
             startActivityForResult(intent, REQUEST_CODE_CHEAT, options.toBundle())
-
         }
 
         nextButton.setOnClickListener {
             quizViewModel.moveToNext()
             updateQuestion()
         }
+
+        remainingCheats.setText("남은 커닝 횟수 [${quizViewModel.currentRemainingCheats}]")
 
         updateQuestion() // 맨 처음 실행 했을 때 보여 주기 위해서 호출함.
 
@@ -81,6 +85,13 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == REQUEST_CODE_CHEAT) {
             quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+            quizViewModel.currentRemainingCheats--
+
+            remainingCheats.setText("남은 커닝 횟수 [${quizViewModel.currentRemainingCheats}]")
+        }
+
+        if(quizViewModel.currentRemainingCheats == 0){
+            cheatButton.isEnabled = false
         }
     } // setResult함수가 호출됐을 때 안드로이드 매니저가 자동 호출시킴
     // 그래서 이때 실행 해야할 것들을 구현
