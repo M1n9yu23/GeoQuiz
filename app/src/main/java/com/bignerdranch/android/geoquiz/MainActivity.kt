@@ -1,6 +1,7 @@
 package com.bignerdranch.android.geoquiz
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate(Bundle?) called" )
+        Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
@@ -57,7 +58,10 @@ class MainActivity : AppCompatActivity() {
             // CheatActivity를 시작시킨다.
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+
+            val options = ActivityOptions.makeClipRevealAnimation(it, 0, 0, it.width, it.height)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT, options.toBundle())
+
         }
 
         nextButton.setOnClickListener {
@@ -71,11 +75,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK){
+        if (resultCode != Activity.RESULT_OK) {
             return
         }
 
-        if(requestCode == REQUEST_CODE_CHEAT) {
+        if (requestCode == REQUEST_CODE_CHEAT) {
             quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
         }
     } // setResult함수가 호출됐을 때 안드로이드 매니저가 자동 호출시킴
@@ -91,19 +95,19 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onResume() called")
     }
 
-    override fun onPause(){
+    override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause() called")
     }
 
-    override fun onSaveInstanceState(savedInstanceState: Bundle){
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         Log.d(TAG, "onSaveInstanceState")
         savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
         savedInstanceState.putBoolean(KEY_CHEATER, quizViewModel.isCheater)
     }
 
-    override fun onStop(){
+    override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop() called")
     }
@@ -113,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onDestroy() called")
     }
 
-    private fun checkAnswer(userAnswer: Boolean){
+    private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = quizViewModel.currentQuestionAnswer
 
         val messageResId = when {
@@ -125,7 +129,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 
-    private fun updateQuestion(){
+    private fun updateQuestion() {
         val questionTextResId = quizViewModel.currentQuestionTexT
         questionTextView.setText(questionTextResId)
         quizViewModel.isCheater = false
